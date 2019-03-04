@@ -51,7 +51,6 @@ def parse_file( fname, points, transform, screen, color ):
                 m_translate = make_translate(coords[0], coords[1], coords[2])
                 matrix_mult(m_translate, transform)
             elif line == 'rotate':
-                rotations = {'x': make_rotX, 'y': make_rotY, 'z': make_rotZ}
                 rotation = file.readline().rstrip('\n').split()
                 if rotation[0] == 'x':
                     m_rotate = make_rotX(int(rotation[1]))
