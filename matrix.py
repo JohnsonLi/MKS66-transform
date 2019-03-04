@@ -10,6 +10,14 @@ z0  z1  ... zn
 import math
 
 def make_translate( x, y, z ):
+    m = [[1, 0, 0, 0],
+         [0, 1, 0, 0],
+         [0, 0, 1, 0],
+         [x, y, z, 1]
+        ]
+    return m
+
+def make_scale( x, y, z ):
     m = [[x, 0, 0, 0],
          [0, y, 0, 0],
          [0, 0, z, 0],
@@ -17,36 +25,28 @@ def make_translate( x, y, z ):
         ]
     return m
 
-def make_scale( x, y, z ):
-    m = [[1, 0, 0, x],
-         [0, 1, 0, y],
-         [0, 0, 1, z],
+def make_rotX( theta ):
+    theta = math.radians(theta)
+    m = [[1, 0, 0, 0],
+         [0, math.cos(theta), math.sin(theta), 0],
+         [0, -1 * math.sin(theta), math.cos(theta), 0],
          [0, 0, 0, 1]
         ]
     return m
 
-def make_rotX( theta ):
-    theta = theta * (math.pi / 180)
-    m = [[1, 0, 0, 0],
-         [0, math.cos(theta), -1 * math.sin(theta), 0],
-         [0, math.sin(theta), math.cos(theta), 0]
-         [0, 0, 0, 1],
-        ]
-    return m
-
 def make_rotY( theta ):
-    theta = theta * (math.pi / 180)
-    m = [[math.cos(theta), 0, math.sin(theta), 0],
+    theta =  math.radians(theta)
+    m = [[math.cos(theta), 0, -1 *math.sin(theta), 0],
          [0, 1, 0, 0],
-         [-1 * math.sin(theta), 0, math.cos(theta), 0],
+         [math.sin(theta), 0, math.cos(theta), 0],
          [0, 0, 0, 1]
         ]
     return m
 
 def make_rotZ( theta ):
-    theta = theta * (math.pi / 180)
-    m = [[math.cos(theta), -1 * math.sin(theta), 0, 0],
-         [math.sin(theta), math.cos(theta), 0, 0],
+    theta =  math.radians(theta)
+    m = [[math.cos(theta), math.sin(theta), 0, 0],
+         [-1 * math.sin(theta), math.cos(theta), 0, 0],
          [0, 0, 1, 0],
          [0, 0, 0, 1]
         ]

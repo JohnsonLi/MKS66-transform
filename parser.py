@@ -32,14 +32,48 @@ The file follows the following format:
 
 See the file script for an example of the file format
 """
-# def parse_file( fname, points, transform, screen, color ):
-fname = 'script'
-with open(fname, "r") as file:
-    data = file.readline()
-    print(data)
-    data = file.readline()
-    print(data)
-    data = file.readline()
-    print(data)
-    data = file.readline()
-    print(data)
+def parse_file( fname, points, transform, screen, color ):
+    with open(fname, "r") as file:
+        line = file.readline().rstrip('\n')
+        while line:
+            print(line)
+            if line == 'line':
+                coords = [int(i) for i in file.readline().rstrip('\n').split()]
+                add_edge(points, coords[0], coords[1], coords[2], coords[3], coords[4], coords[5])
+            elif line == 'ident':
+                ident(transform)
+            elif line == 'scale':
+                factors = [int(i) for i in file.readline().rstrip('\n').split()]
+                m_scale = make_scale(factors[0], factors[1], factors[2])
+                matrix_mult(m_scale, transform)
+            elif line == 'translate' or line == 'move':
+                coords = [int(i) for i in file.readline().rstrip('\n').split()]
+                m_translate = make_translate(coords[0], coords[1], coords[2])
+                matrix_mult(m_translate, transform)
+            elif line == 'rotate':
+                rotations = {'x': make_rotX, 'y': make_rotY, 'z': make_rotZ}
+                rotation = file.readline().rstrip('\n').split()
+                if rotation[0] == 'x':
+                    m_rotate = make_rotX(int(rotation[1]))
+                if rotation[0] == 'y':
+                    m_rotate = make_rotY(int(rotation[1]))
+                if rotation[0] == 'z':
+                    m_rotate = make_rotZ(int(rotation[1]))
+                matrix_mult(m_rotate, transform)
+            elif line == 'apply':
+                matrix_mult(transform, points)
+                points = [[int(i) for i in row] for row in points]
+            elif line == 'display':
+                clear_screen(screen)
+                draw_lines(points, screen, color)
+                display(screen)
+            elif line == 'save':
+                clear_screen(screen)
+                draw_lines(points, screen, color)
+                name = file.readline().rstrip('\n')
+                save_extension(screen, name)
+            elif line == 'end':
+                return
+                
+            line = file.readline().rstrip('\n')
+
